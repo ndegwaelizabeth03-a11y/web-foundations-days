@@ -10,6 +10,10 @@ let notes = [
 
 // 1. Search notes
 function searchNotes(word) {
+    if (typeof word !== "string") {
+        return [];
+    }
+
     return notes.filter(note =>
         note.text.toLowerCase().includes(word.toLowerCase())
     );
@@ -21,6 +25,12 @@ console.log(searchNotes("day"));
 // Expected: [{ id: 2, text: "Finish the Day 3 assignment", category: "study" }]
 
 console.log(searchNotes("python"));
+// Expected: []
+
+console.log(searchNotes(undefined));
+// Expected: []
+
+console.log(searchNotes(123));
 // Expected: []
 
 
