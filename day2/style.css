@@ -1,4 +1,3 @@
-
 /* 1. Reset */
 * {
     box-sizing: border-box;
@@ -46,7 +45,16 @@ nav a {
                 color 0.3s ease;
 }
 
+/* Navigation hover effect */
 nav a:hover {
+    background-color: white;
+    color: #243b55;
+}
+
+/* Navigation keyboard focus */
+nav a:focus-visible {
+    outline: 3px solid #ffd166;
+    outline-offset: 3px;
     background-color: white;
     color: #243b55;
 }
@@ -136,6 +144,7 @@ textarea {
     resize: vertical;
 }
 
+/* Form field focus */
 input:focus,
 textarea:focus,
 select:focus {
@@ -156,9 +165,16 @@ button {
                 transform 0.3s ease;
 }
 
+/* Button hover effect */
 button:hover {
     background-color: #3d6085;
     transform: translateY(-2px);
+}
+
+/* Button keyboard focus */
+button:focus-visible {
+    outline: 3px solid #ffd166;
+    outline-offset: 3px;
 }
 
 /* 11. Small screens */
