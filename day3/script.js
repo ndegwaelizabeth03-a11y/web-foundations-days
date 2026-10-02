@@ -94,8 +94,13 @@ function getSummary() {
 console.log(getSummary());
 // Expected: "5 notes: 2 personal, 1 work, 2 study."
 
-console.log(notes.length === 0 ? "0 notes: 0 personal, 0 work, 0 study." : getSummary());
-// Expected: "5 notes: 2 personal, 1 work, 2 study."
+const savedNotesForSummary = notes;
+notes = [{ id: 1, text: "Call mum", category: "personal" }];
+
+console.log(getSummary());
+// Expected: "1 note: 1 personal, 0 work, 0 study."
+
+notes = savedNotesForSummary;
 
 
 // 5. Check for duplicate notes
