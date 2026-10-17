@@ -13,36 +13,65 @@ const status = document.getElementById("status");
 const DRAFT_KEY = "day4-note-draft";
 const THEME_KEY = "day4-theme";
 
+// Track whether the previous count was above 180 characters.
+let wasWarning = false;
+
 // Update the character count, word count and warning classes.
 function updateCounts() {
     const text = noteText.value;
     const characters = text.length;
-
     const trimmedText = text.trim();
 
     const words = trimmedText === ""
         ? 0
         : trimmedText.split(/\s+/).length;
 
+    // Display both counters.
     charCount.textContent = `${characters} / 200 characters`;
     wordCount.textContent = `${words} words`;
 
-    // Remove old warning classes before checking the new count.
+    // Remove previous warning classes.
     charCount.classList.remove("warning", "over");
 
+    // Apply the correct warning class.
     if (characters > 200) {
         charCount.classList.add("over");
     } else if (characters > 180) {
         charCount.classList.add("warning");
     }
+
+    const isWarning = characters > 180;
+
+    // Announce when the user crosses the 180-character threshold.
+    if (!wasWarning && characters > 180 && characters <= 200) {
+        status.textContent =
+            "You have exceeded 180 characters. You are approaching the 200-character limit.";
+    }
+
+    // Announce when the user exceeds 200 characters.
+    if (characters > 200 && characters <= 201) {
+        status.textContent =
+            "Warning: You have exceeded 200 characters.";
+    }
+
+    // Announce when the user returns to 180 characters or fewer.
+    if (wasWarning && !isWarning) {
+        status.textContent =
+            "You are back within the 180-character warning threshold.";
+    }
+
+    wasWarning = isWarning;
 }
 
 // Save the current note as a draft.
 function saveDraft() {
     try {
         localStorage.setItem(DRAFT_KEY, noteText.value);
+        return true;
     } catch (error) {
-        status.textContent = "Draft could not be saved in this browser.";
+        status.textContent =
+            "Draft could not be saved in this browser.";
+        return false;
     }
 }
 
@@ -54,9 +83,11 @@ function clearNote() {
         localStorage.removeItem(DRAFT_KEY);
         status.textContent = "Note cleared. Draft removed.";
     } catch (error) {
-        status.textContent = "Note cleared, but the saved draft could not be removed.";
+        status.textContent =
+            "Note cleared, but the saved draft could not be removed.";
     }
 
+    wasWarning = false;
     updateCounts();
 }
 
@@ -74,9 +105,15 @@ function applyTheme(isDark) {
 // Save the selected theme.
 function saveTheme(isDark) {
     try {
-        localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
+        localStorage.setItem(
+            THEME_KEY,
+            isDark ? "dark" : "light"
+        );
+        return true;
     } catch (error) {
-        status.textContent = "Theme changed, but the preference could not be saved.";
+        status.textContent =
+            "Theme changed, but the preference could not be saved.";
+        return false;
     }
 }
 
@@ -102,23 +139,18 @@ try {
 // Restore the saved theme when the page loads.
 try {
     const savedTheme = localStorage.getItem(THEME_KEY);
-
     applyTheme(savedTheme === "dark");
 } catch (error) {
     applyTheme(false);
 }
 
-// Show the correct counters for the initial or restored note.
+// Display the correct counters for the initial or restored note.
 updateCounts();
 
 // Save the draft and update counters whenever the user types.
 noteText.addEventListener("input", function () {
     updateCounts();
     saveDraft();
-
-    if (status.textContent !== "Draft could not be saved in this browser.") {
-        status.textContent = "Draft saved automatically.";
-    }
 });
 
 // Clear the note when the Clear button is clicked.
@@ -133,3 +165,4 @@ noteText.addEventListener("keydown", function (event) {
         clearNote();
     }
 });
+
