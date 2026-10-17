@@ -4,36 +4,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Day 4 - Live Notes</title>
+
+    <meta
+        name="description"
+        content="A simple notes app with live character and word counts, automatic draft saving, and a dark theme."
+    >
+
+    <title>Live Notes | Day 4</title>
+
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
 <body>
     <main class="container">
-        <h1>Live Notes</h1>
-        <p>Write your notes below. Your draft is saved automatically.</p>
+        <header class="page-header">
+            <p class="eyebrow">DAY 4 ASSIGNMENT</p>
+            <h1>Live Notes</h1>
+            <p class="intro">
+                Write your thoughts, track your words, and let your
+                browser save your draft automatically.
+            </p>
+        </header>
 
-        <label for="note-text">Your note</label>
-        <textarea
-            id="note-text"
-            rows="10"
-            maxlength="5000"
-            placeholder="Start typing your note here..."
-        ></textarea>
+        <section class="notes-panel" aria-labelledby="note-heading">
+            <h2 id="note-heading">Your note</h2>
 
-        <div class="counter-container">
-            <p id="char-count">0 / 200 characters</p>
-            <p id="word-count">0 words</p>
-        </div>
+            <label for="note-text">Note content</label>
 
-        <p class="hint">Warning at 181 characters. Maximum recommended length: 200.</p>
+            <textarea
+                id="note-text"
+                rows="10"
+                maxlength="5000"
+                placeholder="Start typing your note here..."
+                aria-describedby="note-help char-count word-count"
+            ></textarea>
 
-        <div class="buttons">
-            <button id="clear-btn" type="button">Clear note</button>
-            <button id="theme-toggle" type="button">Dark mode</button>
-        </div>
+            <p id="note-help" class="hint">
+                Your draft is saved automatically in this browser.
+                Press Escape to clear the note.
+            </p>
 
-        <p id="status" aria-live="polite"></p>
+            <div class="counter-container">
+                <p
+                    id="char-count"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >0 / 200 characters</p>
+
+                <p
+                    id="word-count"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >0 words</p>
+            </div>
+
+            <p id="status" class="status" role="status">
+                Ready to write.
+            </p>
+
+            <div class="buttons">
+                <button id="clear-btn" type="button">
+                    Clear note
+                </button>
+
+                <button
+                    id="theme-toggle"
+                    type="button"
+                    aria-pressed="false"
+                >Dark mode</button>
+            </div>
+        </section>
+
+        <footer class="page-footer">
+            <p>Simple notes. Automatic saving. Your choice of theme.</p>
+        </footer>
     </main>
 </body>
 </html>
