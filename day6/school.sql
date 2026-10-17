@@ -3,13 +3,16 @@
 -- Enable foreign key enforcement
 PRAGMA foreign_keys = ON;
 
--- Remove existing tables so the script can be rerun
+
+-- 1. DROP EXISTING TABLES
+-- Drop enrolments first because it references the other tables
+
 DROP TABLE IF EXISTS enrolments;
 DROP TABLE IF EXISTS courses;
 DROP TABLE IF EXISTS students;
 
 
--- 1. CREATE TABLES
+-- 2. CREATE STUDENTS TABLE
 
 CREATE TABLE students (
     student_id INTEGER PRIMARY KEY,
@@ -17,10 +20,16 @@ CREATE TABLE students (
     email TEXT NOT NULL UNIQUE
 );
 
+
+-- 3. CREATE COURSES TABLE
+
 CREATE TABLE courses (
     course_id INTEGER PRIMARY KEY,
     course_name TEXT NOT NULL UNIQUE
 );
+
+
+-- 4. CREATE ENROLMENTS TABLE
 
 CREATE TABLE enrolments (
     enrolment_id INTEGER PRIMARY KEY,
@@ -29,17 +38,19 @@ CREATE TABLE enrolments (
     grade TEXT,
 
     FOREIGN KEY (student_id)
-        REFERENCES students(student_id),
+        REFERENCES students(student_id)
+        ON DELETE CASCADE,
 
     FOREIGN KEY (course_id)
-        REFERENCES courses(course_id),
+        REFERENCES courses(course_id)
+        ON DELETE CASCADE,
 
-    -- Prevent duplicate enrolments for the same course
+    -- Prevent duplicate enrolments
     UNIQUE (student_id, course_id)
 );
 
 
--- 2. INSERT SAMPLE STUDENTS
+-- 5. INSERT SAMPLE STUDENTS
 
 INSERT INTO students (student_id, name, email) VALUES
 (1, 'Amina Otieno', 'amina@example.com'),
@@ -48,7 +59,7 @@ INSERT INTO students (student_id, name, email) VALUES
 (4, 'David Mwangi', 'david@example.com');
 
 
--- 3. INSERT SAMPLE COURSES
+-- 6. INSERT SAMPLE COURSES
 
 INSERT INTO courses (course_id, course_name) VALUES
 (1, 'Mathematics'),
@@ -56,7 +67,7 @@ INSERT INTO courses (course_id, course_name) VALUES
 (3, 'Statistics');
 
 
--- 4. INSERT FIVE ENROLMENTS
+-- 7. INSERT FIVE ENROLMENTS
 
 INSERT INTO enrolments
     (enrolment_id, student_id, course_id, grade)
@@ -68,7 +79,7 @@ VALUES
 (5, 3, 2, 'A');
 
 
--- 5. CREATE INDEX FOR COURSE LOOKUPS
+-- 8. CREATE INDEX FOR COURSE LOOKUPS
 
 CREATE INDEX IF NOT EXISTS idx_enrolments_course_id
 ON enrolments(course_id);
@@ -134,7 +145,7 @@ JOIN courses AS c
 WHERE e.enrolment_id = 3;
 
 
--- 6. VERIFY THAT SQLITE USES THE COURSE INDEX
+-- 9. VERIFY INDEX USAGE
 
 EXPLAIN QUERY PLAN
 SELECT *
