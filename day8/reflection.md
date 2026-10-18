@@ -1,0 +1,7 @@
+# Reflection
+
+**Most difficult concept.** The hardest idea for me was thinking about many things happening at the same time, such as two people trying to buy the same seat, or a read replica showing slightly old data. I was used to one step happening after another, so race conditions and replication lag were hard to picture. I overcame this by writing out concrete step-by-step flows, then asking "what if two requests arrive together?" at every step. Turning big numbers into per-second estimates, for example 50 million views a day into 579 per second, also made scale feel real instead of abstract.
+
+**What I would improve.** The feedback on my scaling plan showed me that the upload flow and trade-offs were hard to find, so I learned to keep documents short, clearly structured and easy to check against the requirements. In my QuickNotes capstone I would improve the architecture document by explaining in more detail how the system recovers from failures, and I would test the API client against the real service with more error cases, such as a slow or offline connection.
+
+**What I will learn next.** Next I want to build a real backend with a database and sign-in, so the designs I wrote become working software. I also want to learn about testing, basic security such as safely handling user input, and how teams monitor a live system.
